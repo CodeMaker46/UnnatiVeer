@@ -14,21 +14,22 @@ app.use(cors({
 app.use(express.json());
 app.use(morgan('dev'));
 
-const connectWithRetry = () => {
-  mongoose.connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    serverSelectionTimeoutMS: 5000,
-    socketTimeoutMS: 45000,
-  })
-  .then(() => {
+const connectWithRetry = async () => {
+  try {
+    await mongoose.connect(process.env.MONGODB_URI, {
+      serverSelectionTimeoutMS: 5000,
+      socketTimeoutMS: 45000,
+      heartbeatFrequencyMS: 2000,
+      maxPoolSize: 10,
+      retryWrites: true,
+      w: 'majority'
+    });
     console.log('Connected to MongoDB Atlas');
-  })
-  .catch(err => {
+  } catch (err) {
     console.error('MongoDB connection error:', err);
     console.log('Retrying connection in 5 seconds...');
     setTimeout(connectWithRetry, 5000);
-  });
+  }
 };
 
 // Initial connection
