@@ -216,7 +216,7 @@ const AthleteDashboard = () => {
                           <span className="font-medium text-teal-400">Organization:</span> {support.organization?.name || 'Unknown'}
                         </p>
                         <p className="text-sm text-gray-300 mb-2">
-                          <span className="font-medium text-teal-400">Valid:</span> {new Date(support.validFrom).toLocaleDateString()} - {new Date(support.validTill).toLocaleDateString()}
+                          <span className="font-medium text-teal-400">Valid till:</span>{new Date(support.validTill).toLocaleDateString()}
                         </p>
                       </div>
                       <span className={`px-3 py-1 rounded-full text-xs font-medium bg-green-500/20 text-green-300`}>
