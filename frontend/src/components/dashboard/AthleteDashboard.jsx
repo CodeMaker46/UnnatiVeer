@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Calendar, Trophy, Users, Target, MapPin, Filter, Menu, Bell } from 'lucide-react';
+import { Calendar, Users, Target, MapPin, Filter, Menu, Trophy, LogOut, Bell } from 'lucide-react';
 import axios from '../../utils/axios';
 import AthleteProfile from './AthleteProfile';
-
+import { motion } from 'framer-motion';
 import { useAuth } from '../../context/AuthContext';
 
 const AthleteDashboard = () => {
@@ -41,12 +41,12 @@ const AthleteDashboard = () => {
     }
   };
 
-  const tabs = [
-    { id: 'events', label: 'Events', icon: Target },
-    { id: 'sponsorships', label: 'Sponsorships', icon: Trophy },
-    { id: 'travel', label: 'Travel Support', icon: MapPin },
-    { id: 'applications', label: 'My Applications', icon: Calendar },
-    { id: 'profile', label: 'My Profile', icon: Users }
+  const menuItems = [
+    { id: 'events', label: 'Events', icon: '🎯' },
+    { id: 'sponsorships', label: 'Sponsorships', icon: '💰' },
+    { id: 'travel', label: 'Travel Support', icon: '✈️' },
+    { id: 'applications', label: 'My Applications', icon: '📝' },
+    { id: 'profile', label: 'My Profile', icon: '👤' }
   ];
 
   const fetchData = useCallback(async () => {
@@ -90,177 +90,174 @@ const AthleteDashboard = () => {
   }, [fetchData]);
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-gray-900 to-gray-800">
+    <div className="flex h-screen bg-[#0B0B1E]">
       {/* Sidebar */}
-      <div className="w-72 bg-black/30 backdrop-blur-xl p-6 flex flex-col gap-4">
-        <div className="flex items-center gap-3 mb-8">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-500" />
-          <div>
-            <h2 className="text-xl font-bold text-white">Athlete portal</h2>
-            <p className="text-gray-400 text-sm">
-  Welcome back, {athleteProfile ? athleteProfile.fullName : 'Loading...'}
-</p>
-          </div>
+      <div className="w-64 bg-[#0F0F2D] p-4 flex flex-col">
+        <div className="flex items-center space-x-2 mb-8 px-2">
+          <Trophy className="h-8 w-8 text-blue-500" />
+          <span className="text-white text-xl font-bold">UnnatiVeer</span>
         </div>
 
-        <div className="space-y-2">
-          {tabs.map(({ id, label, icon: Icon }) => (
-            <button
-              key={id}
-              onClick={() => setActiveTab(id)}
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 w-full
-                ${activeTab === id 
-                  ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg'
-                  : 'text-gray-400 hover:bg-white/5'}`}
+        <nav className="flex-1">
+          {menuItems.map((item) => (
+            <motion.button
+              key={item.id}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => setActiveTab(item.id)}
+              className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg mb-2 transition-colors ${
+                activeTab === item.id
+                  ? 'bg-blue-600 text-white'
+                  : 'text-gray-400 hover:bg-white/5'
+              }`}
             >
-              <Icon className="w-5 h-5" />
-              <span className="font-medium">{label}</span>
-            </button>
+              <span className="text-xl">{item.icon}</span>
+              <span>{item.label}</span>
+            </motion.button>
           ))}
+        </nav>
+
+        <div className="border-t border-white/10 pt-4">
+          <button 
+            onClick={logout}
+            className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-400 hover:bg-white/5 transition-colors"
+          >
+            <LogOut className="h-5 w-5" />
+            <span>Logout</span>
+          </button>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 p-8">
-        {/* Top Navigation */}
-        <div className="flex justify-between items-center mb-8">
-          <div className="flex items-center gap-4">
-            <h1 className="text-2xl font-bold text-white">{tabs.find(t => t.id === activeTab)?.label}</h1>
-            <button
-              onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-lg hover:bg-white/10 transition-all duration-300 text-gray-300"
-            >
-              <Filter className="w-4 h-4" />
-              <span>Filters</span>
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Header */}
+        <header className="h-16 bg-[#0F0F2D] border-b border-white/10 flex items-center justify-between px-6">
+          <div className="flex-1"></div>
+          <div className="flex items-center space-x-4">
+            <button className="relative p-2 text-gray-400 hover:text-white transition-colors">
+              <Bell className="h-6 w-6" />
+              <span className="absolute top-1 right-1 h-2 w-2 bg-red-500 rounded-full"></span>
             </button>
+            <div className="h-8 w-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-medium">
+              {athleteProfile?.fullName?.charAt(0) || 'A'}
+            </div>
           </div>
-          
-          <div className="flex items-center gap-4">
-            <button className="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-all duration-300">
-              <Bell className="w-5 h-5 text-gray-400" />
-            </button>
-          </div>
-        </div>
+        </header>
 
-        {/* Content Section */}
-        {loading ? (
-          <div className="flex justify-center items-center py-12">
-            <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+        {/* Main Content Area */}
+        <main className="flex-1 overflow-auto p-6">
+          {/* Page Header */}
+          <div className="flex justify-between items-center mb-6">
+            <h1 className="text-2xl font-bold text-white">
+              {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}
+            </h1>
           </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-rows-2 lg:grid-rows-3 gap-6">
-            {activeTab === 'events' && events.map(event => (
-              <div 
-                key={event._id} 
-                className="bg-black/30 backdrop-blur-xl border border-gray-800 rounded-xl p-6 hover:border-gray-700 transition-all duration-300"
-              >
-                <div className="flex flex-col gap-3">
-                  <div className="w-full h-32 rounded-lg bg-gradient-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center">
-                    <Target className="w-8 h-8 text-blue-400" />
-                  </div>
-                  <h3 className="text-lg font-semibold text-white">{event.title}</h3>
-                  <div className="flex items-center gap-2 text-gray-400">
-                    <Calendar className="w-4 h-4" />
-                    <span className="text-sm">{new Date(event.date).toLocaleDateString()}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-gray-400">
-                    <MapPin className="w-4 h-4" />
-                    <span className="text-sm">{event.location.city}, {event.location.state}</span>
-                  </div>
-                  <button
-                    onClick={() => handleApply(event._id, 'event')}
-                    className="mt-4 w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg transition-colors"
-                  >
-                    Apply Now
-                  </button>
-                </div>
+
+          {/* Content Area */}
+          <div className="space-y-6">
+            {loading ? (
+              <div className="flex justify-center items-center h-64">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
               </div>
-            ))}
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {activeTab === 'events' && events.map(event => (
+                  <div key={event._id} className="bg-white/10 backdrop-blur-lg rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-white/10">
+                    <div className="flex justify-between items-start mb-4">
+                      <div>
+                        <h3 className="text-xl font-semibold text-white mb-2 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">{event.title}</h3>
+                        <p className="text-sm text-gray-300 mb-2">{new Date(event.date).toLocaleDateString()}</p>
+                      </div>
+                    </div>
+                    <div className="text-sm text-gray-300 space-y-3">
+                      <p><span className="font-medium text-blue-400">Location:</span> {event.location.city}, {event.location.state}</p>
+                      <button
+                        onClick={() => handleApply(event._id, 'event')}
+                        className="w-full mt-4 bg-gradient-to-r from-blue-500 to-purple-500 text-white py-2 rounded-lg hover:shadow-lg transition-all duration-300"
+                      >
+                        Apply Now
+                      </button>
+                    </div>
+                  </div>
+                ))}
 
-            {activeTab === 'sponsorships' && sponsorships.map(sponsorship => (
-              <div
-                key={sponsorship._id}
-                className="bg-black/30 backdrop-blur-xl border border-gray-800 rounded-xl p-6 hover:border-gray-700 transition-all duration-300"
-              >
-                <div className="flex flex-col gap-3">
-                  <div className="w-full h-32 rounded-lg bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center">
-                    <Trophy className="w-8 h-8 text-purple-400" />
-                  </div>
-                  <h3 className="text-lg font-semibold text-white">{sponsorship.title}</h3>
-                  <p className="text-gray-400">{sponsorship.description}</p>
-                  <div className="flex items-center gap-2 text-gray-400">
-                    <span className="text-sm">Amount: ₹{sponsorship.amount}</span>
-                  </div>
-                  <button
-                    onClick={() => handleApply(sponsorship._id, 'sponsorship')}
-                    className="mt-4 w-full bg-purple-500 hover:bg-purple-600 text-white py-2 rounded-lg transition-colors"
+                {activeTab === 'sponsorships' && sponsorships.map(sponsorship => (
+                  <div
+                    key={sponsorship._id}
+                    className="bg-white/10 backdrop-blur-lg rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-white/10"
                   >
-                    Apply Now
-                  </button>
-                </div>
-              </div>
-            ))}
+                    <div className="flex justify-between items-start mb-4">
+                      <div>
+                        <h3 className="text-xl font-semibold text-white mb-2 bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">{sponsorship.title}</h3>
+                        <p className="text-sm text-gray-300 mb-2">{sponsorship.description}</p>
+                      </div>
+                    </div>
+                    <div className="text-sm text-gray-300 space-y-3">
+                      <p><span className="font-medium text-purple-400">Amount:</span> ₹{sponsorship.amount}</p>
+                      <button
+                        onClick={() => handleApply(sponsorship._id, 'sponsorship')}
+                        className="w-full mt-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white py-2 rounded-lg hover:shadow-lg transition-all duration-300"
+                      >
+                        Apply Now
+                      </button>
+                    </div>
+                  </div>
+                ))}
 
-            {activeTab === 'travel' && travelSupports.map(support => (
-              <div
-                key={support._id}
-                className="bg-black/30 backdrop-blur-xl border border-gray-800 rounded-xl p-6 hover:border-gray-700 transition-all duration-300"
-              >
-                <div className="flex flex-col gap-3">
-                  <div className="w-full h-32 rounded-lg bg-gradient-to-br from-green-500/20 to-teal-500/20 flex items-center justify-center">
-                    <MapPin className="w-8 h-8 text-green-400" />
-                  </div>
-                  <h3 className="text-lg font-semibold text-white">{support.title}</h3>
-                  <p className="text-gray-400">{support.details}</p>
-                  <div className="flex items-center gap-2 text-gray-400">
-                    <span className="text-sm">Coverage: {support.coverageType}</span>
-                  </div>
-                  <button
-                    onClick={() => handleApply(support._id, 'travel')}
-                    className="mt-4 w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded-lg transition-colors"
+                {activeTab === 'travel' && travelSupports.map(support => (
+                  <div
+                    key={support._id}
+                    className="bg-white/10 backdrop-blur-lg rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-white/10"
                   >
-                    Apply Now
-                  </button>
-                </div>
+                    <div className="flex justify-between items-start mb-4">
+                      <div>
+                        <h3 className="text-xl font-semibold text-white mb-2 bg-gradient-to-r from-green-400 to-teal-500 bg-clip-text text-transparent">{support.title}</h3>
+                        <p className="text-sm text-gray-300 mb-2">{support.details}</p>
+                      </div>
+                    </div>
+                    <div className="text-sm text-gray-300 space-y-3">
+                      <p><span className="font-medium text-teal-400">Coverage:</span> {support.coverageType}</p>
+                      <button
+                        onClick={() => handleApply(support._id, 'travel')}
+                        className="w-full mt-4 bg-gradient-to-r from-green-500 to-teal-500 text-white py-2 rounded-lg hover:shadow-lg transition-all duration-300"
+                      >
+                        Apply Now
+                      </button>
+                    </div>
+                  </div>
+                ))}
+
+                {activeTab === 'applications' && applications.map(application => (
+                  <div
+                    key={application._id}
+                    className="bg-white/10 backdrop-blur-lg rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-white/10"
+                  >
+                    <div className="flex justify-between items-start mb-4">
+                      <div>
+                        <h3 className="text-xl font-semibold text-white mb-2 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">{application.itemId?.title || "No Title"}</h3>
+                        <p className="text-sm text-gray-300 mb-2">{application.itemId?.description || "No description available"}</p>
+                      </div>
+                    </div>
+                    <div className="text-sm text-gray-300 space-y-3">
+                      <p><span className="font-medium text-blue-400">Applied Date:</span> {new Date(application.createdAt).toLocaleDateString()}</p>
+                      <div className="flex items-center gap-2">
+                        <span className={`px-2 py-1 rounded-full text-xs ${
+                          application.status === 'approved' ? 'bg-green-500/20 text-green-400' :
+                          application.status === 'rejected' ? 'bg-red-500/20 text-red-400' :
+                          'bg-yellow-500/20 text-yellow-400'
+                        }`}>
+                          {application.status.charAt(0).toUpperCase() + application.status.slice(1)}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+
+                {activeTab === 'profile' && <AthleteProfile />}
               </div>
-            ))}
-
-{activeTab === 'applications' && applications.map(application => (
-  <div
-    key={application._id}
-    className="bg-black/30 backdrop-blur-xl border border-gray-800 rounded-xl p-6 hover:border-gray-700 transition-all duration-300"
-  >
-    <div className="flex flex-col gap-3">
-      {/* Event Title */}
-      <h3 className="text-lg font-semibold text-white">{application.itemId?.title || "No Title"}</h3>
-
-      {/* Event Description */}
-      <p className="text-sm text-gray-300">{application.itemId?.description || "No description available"}</p>
-
-      {/* Applied Date */}
-      <div className="flex items-center gap-2 text-gray-400">
-        <Calendar className="w-4 h-4" />
-        <span className="text-sm">{new Date(application.createdAt).toLocaleDateString()}</span>
-      </div>
-
-      {/* Status */}
-      <div className="flex items-center gap-2">
-        <span className={`px-2 py-1 rounded-full text-xs ${
-          application.status === 'approved' ? 'bg-green-500/20 text-green-400' :
-          application.status === 'rejected' ? 'bg-red-500/20 text-red-400' :
-          'bg-yellow-500/20 text-yellow-400'
-        }`}>
-          {application.status.charAt(0).toUpperCase() + application.status.slice(1)}
-        </span>
-      </div>
-    </div>
-  </div>
-))}
-
-
-            {activeTab === 'profile' && <AthleteProfile />}
+            )}
           </div>
-        )}
+        </main>
       </div>
     </div>
   );
