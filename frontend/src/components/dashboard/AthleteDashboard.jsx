@@ -123,7 +123,7 @@ const AthleteDashboard = () => {
             className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-400 hover:bg-white/5 transition-colors"
           >
             <LogOut className="h-5 w-5" />
-            <span>Logout</span>
+            <span >Logout</span>
           </button>
         </div>
       </div>
@@ -212,14 +212,26 @@ const AthleteDashboard = () => {
                     <div className="flex justify-between items-start mb-4">
                       <div>
                         <h3 className="text-xl font-semibold text-white mb-2 bg-gradient-to-r from-green-400 to-teal-500 bg-clip-text text-transparent">{support.title}</h3>
-                        <p className="text-sm text-gray-300 mb-2">{support.details}</p>
+                        <p className="text-sm text-gray-300 mb-2">
+                          <span className="font-medium text-teal-400">Organization:</span> {support.organization?.name || 'Unknown'}
+                        </p>
+                        <p className="text-sm text-gray-300 mb-2">
+                          <span className="font-medium text-teal-400">Valid:</span> {new Date(support.validFrom).toLocaleDateString()} - {new Date(support.validTill).toLocaleDateString()}
+                        </p>
                       </div>
+                      <span className={`px-3 py-1 rounded-full text-xs font-medium bg-green-500/20 text-green-300`}>
+                        Active
+                      </span>
                     </div>
                     <div className="text-sm text-gray-300 space-y-3">
                       <p><span className="font-medium text-teal-400">Coverage:</span> {support.coverageType}</p>
+                      <p><span className="font-medium text-teal-400">Amount Range:</span> ₹{support.amount?.min || 0} - ₹{support.amount?.max || 0}</p>
+                      <p className="mt-2 text-gray-400 leading-relaxed">{support.details}</p>
+                    </div>
+                    <div className="mt-6">
                       <button
                         onClick={() => handleApply(support._id, 'travel')}
-                        className="w-full mt-4 bg-gradient-to-r from-green-500 to-teal-500 text-white py-2 rounded-lg hover:shadow-lg transition-all duration-300"
+                        className="w-full bg-gradient-to-r from-green-500 to-teal-500 text-white py-2.5 rounded-lg hover:shadow-lg transition-all duration-300"
                       >
                         Apply Now
                       </button>
