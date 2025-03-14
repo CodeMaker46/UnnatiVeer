@@ -154,10 +154,15 @@ const AthleteProfile = () => {
   };
 
   if (loading) {
-    return <div>Loading profile...</div>;
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+      </div>
+    );
   }
 
   return (
+<<<<<<< HEAD
     <div className="w-full py-8">
       <div className="max-w-4xl mx-auto px-4">
         <div className="flex justify-between items-center mb-6">
@@ -166,11 +171,177 @@ const AthleteProfile = () => {
               editing ? 'bg-gradient-to-r from-red-500 to-red-600' : 'bg-gradient-to-r from-blue-500 to-purple-500'
             }`}
             onClick={() => setEditing(!editing)}
+=======
+    <div className="w-full space-y-6">
+      <div className="flex justify-between items-center">
+       
+        <button 
+          className={`px-6 py-2.5 rounded-lg text-white font-medium transition-all duration-300 ${
+            editing 
+              ? 'bg-red-500/20 text-red-300 hover:bg-red-500/30' 
+              : 'bg-blue-500/20 text-blue-300 hover:bg-blue-500/30'
+          }`}
+          onClick={() => setEditing(!editing)}
+        >
+          {editing ? 'Cancel' : 'Edit Profile'}
+        </button>
+      </div>
+
+      {editing ? (
+        <form onSubmit={handleSubmit} className="bg-white/10 backdrop-blur-lg rounded-xl p-6 space-y-6 border border-white/10">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Full Name</label>
+              <input
+                type="text"
+                name="fullName"
+                value={formData.fullName}
+                onChange={handleChange}
+                className="w-full px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Age</label>
+              <input
+                type="number"
+                name="age"
+                value={formData.age}
+                onChange={handleChange}
+                className="w-full px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Sports Category</label>
+              <select
+                name="sportsCategory"
+                value={formData.sportsCategory}
+                onChange={handleChange}
+                className="w-full px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="">Select Sport</option>
+                <option value="cricket">Cricket</option>
+                <option value="football">Football</option>
+                <option value="basketball">Basketball</option>
+                <option value="athletics">Athletics</option>
+                <option value="swimming">Swimming</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Current Level</label>
+              <select
+                name="currentLevel"
+                value={formData.currentLevel}
+                onChange={handleChange}
+                className="w-full px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="school">School</option>
+                <option value="district">District</option>
+                <option value="state">State</option>
+                <option value="national">National</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="space-y-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Bio</label>
+              <textarea
+                name="bio"
+                value={formData.bio}
+                onChange={handleChange}
+                className="w-full px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent min-h-32 resize-y"
+                placeholder="Tell us about yourself..."
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">Achievements</label>
+              <textarea
+                name="achievements"
+                value={formData.achievements}
+                onChange={handleChange}
+                className="w-full px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent min-h-32 resize-y"
+                placeholder="List your achievements..."
+              />
+            </div>
+          </div>
+
+          <button 
+            type="submit" 
+            className="w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium py-3 rounded-lg transition-all duration-300 hover:shadow-lg transform hover:scale-[1.02]"
+>>>>>>> f1fce698329f81e68121cd68e699cdfc5fa53a5f
           >
-            {editing ? 'Cancel' : 'Edit Profile'}
+            Save Changes
           </button>
+        </form>
+      ) : (
+        <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 space-y-6 border border-white/10">
+          <div className="space-y-4">
+            <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
+              {profile.fullName}
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <p className="text-gray-300"><span className="font-medium text-blue-400">Age:</span> {profile.age}</p>
+                <p className="text-gray-300"><span className="font-medium text-blue-400">Sport:</span> {profile.sportsCategory}</p>
+                <p className="text-gray-300"><span className="font-medium text-blue-400">Level:</span> {profile.currentLevel}</p>
+              </div>
+              <div className="space-y-2">
+                <p className="text-gray-300"><span className="font-medium text-blue-400">Location:</span> {profile.city}, {profile.state}</p>
+                <p className="text-gray-300"><span className="font-medium text-blue-400">Contact:</span> {profile.contactNumber}</p>
+                <p className="text-gray-300"><span className="font-medium text-blue-400">Guardian:</span> {profile.guardianName}</p>
+              </div>
+            </div>
+
+            <div className="pt-4">
+              <h3 className="text-lg font-semibold text-blue-400 mb-2">Bio</h3>
+              <p className="text-gray-300">{profile.bio}</p>
+            </div>
+
+            <div className="pt-4">
+              <h3 className="text-lg font-semibold text-blue-400 mb-2">Achievements</h3>
+              <p className="text-gray-300">{profile.achievements}</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/10">
+        <h2 className="text-xl font-semibold text-white mb-6">Photos & Videos</h2>
+        
+        <div className="border-2 border-dashed border-white/20 rounded-lg p-8 text-center">
+          <input
+            type="file"
+            multiple
+            accept="image/*,video/*"
+            onChange={handleFileSelect}
+            className="hidden"
+            id="mediaInput"
+          />
+          <label 
+            htmlFor="mediaInput" 
+            className="inline-block px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium rounded-lg cursor-pointer transition-all duration-300 hover:shadow-lg transform hover:scale-[1.02]"
+          >
+            Select Files
+          </label>
+          
+          {(selectedFiles.photos.length > 0 || selectedFiles.videos.length > 0) && (
+            <button 
+              onClick={handleUpload}
+              className={`mt-4 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium rounded-lg transition-all duration-300 hover:shadow-lg transform hover:scale-[1.02] ${
+                uploadingMedia ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
+              disabled={uploadingMedia}
+            >
+              {uploadingMedia ? 'Uploading...' : 'Upload Selected Files'}
+            </button>
+          )}
         </div>
 
+<<<<<<< HEAD
         {editing ? (
           <form onSubmit={handleSubmit} className="bg-[#0F0F2D]/95 backdrop-blur-lg rounded-xl p-6 space-y-6 border border-white/10 shadow-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -203,15 +374,21 @@ const AthleteProfile = () => {
                   value={formData.sportsCategory}
                   onChange={handleChange}
                   className="w-full px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+=======
+        {(selectedFiles.photos.length > 0 || selectedFiles.videos.length > 0) && (
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
+            {selectedFiles.photos.map((photo, index) => (
+              <div key={`photo-preview-${index}`} className="relative aspect-square rounded-lg overflow-hidden bg-white/5">
+                <img src={photo.preview} alt="" className="w-full h-full object-cover" />
+                <button
+                  onClick={() => removeSelectedFile('photos', index)}
+                  className="absolute top-2 right-2 w-8 h-8 flex items-center justify-center bg-red-500/75 hover:bg-red-500 text-white rounded-full transition-all duration-300"
+>>>>>>> f1fce698329f81e68121cd68e699cdfc5fa53a5f
                 >
-                  <option value="">Select Sport</option>
-                  <option value="cricket">Cricket</option>
-                  <option value="football">Football</option>
-                  <option value="basketball">Basketball</option>
-                  <option value="athletics">Athletics</option>
-                  <option value="swimming">Swimming</option>
-                </select>
+                  ×
+                </button>
               </div>
+<<<<<<< HEAD
 
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">Current Level</label>
@@ -389,9 +566,44 @@ const AthleteProfile = () => {
               </div>
             )}
           </div>
+=======
+            ))}
+            
+            {selectedFiles.videos.map((video, index) => (
+              <div key={`video-preview-${index}`} className="relative aspect-square rounded-lg overflow-hidden bg-white/5">
+                <video src={video.preview} className="w-full h-full object-cover" />
+                <button
+                  onClick={() => removeSelectedFile('videos', index)}
+                  className="absolute top-2 right-2 w-8 h-8 flex items-center justify-center bg-red-500/75 hover:bg-red-500 text-white rounded-full transition-all duration-300"
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
+          {media.photos.map((photo, index) => (
+            <div key={`photo-${index}`} className="aspect-square rounded-lg overflow-hidden bg-white/5">
+              <img src={photo.url} alt="" className="w-full h-full object-cover" />
+            </div>
+          ))}
+          
+          {media.videos.map((video, index) => (
+            <div key={`video-${index}`} className="aspect-square rounded-lg overflow-hidden bg-white/5">
+              <video 
+                src={video.url} 
+                controls 
+                className="w-full h-full object-cover"
+              />
+            </div>
+          ))}
+>>>>>>> f1fce698329f81e68121cd68e699cdfc5fa53a5f
         </div>
       </div>
     </div>
   );
 };
+
 export default AthleteProfile;
