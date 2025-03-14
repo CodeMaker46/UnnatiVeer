@@ -92,37 +92,39 @@ const AthleteDashboard = () => {
   return (
     <div className="flex min-h-screen bg-[#0B0B1E]">
       {/* Sidebar */}
-      <div className="w-64 bg-[#0F0F2D] fixed h-screen p-6 flex flex-col gap-4">
-        <div className="flex items-center gap-3 mb-8">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-500" />
+      <div className="w-64 bg-[#0F0F2D] fixed h-screen p-6 flex flex-col gap-4 border-r border-white/10 shadow-xl overflow-y-auto">
+        <div className="flex items-center gap-3 mb-8 sticky top-0 bg-[#0F0F2D] py-2 z-10">
+          <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center">
+            <Users className="w-5 h-5 text-white" />
+          </div>
           <div>
-            <h2 className="text-xl font-bold text-white">Athlete portal</h2>
-            <p className="text-gray-400 text-sm">
-              Welcome back, {athleteProfile ? athleteProfile.fullName : 'Loading...'}
+            <h2 className="text-xl font-bold text-white">Athlete Portal</h2>
+            <p className="text-gray-400 text-sm truncate max-w-[180px]">
+              Welcome, {athleteProfile ? athleteProfile.fullName : 'Loading...'}
             </p>
           </div>
         </div>
 
-        <div className="space-y-2">
+        <nav className="space-y-2 flex-1">
           {tabs.map(({ id, label, icon: Icon }) => (
             <button
               key={id}
               onClick={() => setActiveTab(id)}
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 w-full
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 w-full group
                 ${activeTab === id 
                   ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg'
                   : 'text-gray-400 hover:bg-white/5'}`}
             >
-              <Icon className="w-5 h-5" />
+              <Icon className={`w-5 h-5 transition-colors ${activeTab === id ? 'text-white' : 'text-gray-400 group-hover:text-gray-300'}`} />
               <span className="font-medium">{label}</span>
             </button>
           ))}
-        </div>
+        </nav>
 
-        <div className="mt-auto">
+        <div className="pt-4 border-t border-white/10 sticky bottom-0 bg-[#0F0F2D] py-2">
           <button
             onClick={logout}
-            className="flex items-center gap-3 px-4 py-3 rounded-xl w-full text-red-400 hover:bg-white/5 transition-all duration-300"
+            className="flex items-center gap-3 px-4 py-3 rounded-xl w-full text-red-400 hover:bg-white/5 transition-all duration-300 group"
           >
             <LogOut className="text-gray-400 hover:bg-white/5" />
             <span className="text-gray-400 hover:bg-white/5">Logout</span>
