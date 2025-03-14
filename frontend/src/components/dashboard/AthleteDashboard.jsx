@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Calendar, Trophy, Users, Target, MapPin, Filter, Menu, Bell } from 'lucide-react';
+import { Calendar, Trophy, Users, Target, MapPin, Filter, Menu, Bell, LogOut } from 'lucide-react';
 import axios from '../../utils/axios';
 import AthleteProfile from './AthleteProfile';
 
@@ -85,21 +85,21 @@ const AthleteDashboard = () => {
     fetchAthleteProfile();
   }, []);
   
-  useEffect(() => {
+    useEffect(() => {
     fetchData();
   }, [fetchData]);
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-gray-900 to-gray-800">
+    <div className="flex min-h-screen bg-[#0B0B1E]">
       {/* Sidebar */}
-      <div className="w-72 bg-black/30 backdrop-blur-xl p-6 flex flex-col gap-4">
+      <div className="w-64 bg-[#0F0F2D] fixed h-screen p-6 flex flex-col gap-4">
         <div className="flex items-center gap-3 mb-8">
           <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-500" />
           <div>
             <h2 className="text-xl font-bold text-white">Athlete portal</h2>
             <p className="text-gray-400 text-sm">
-  Welcome back, {athleteProfile ? athleteProfile.fullName : 'Loading...'}
-</p>
+              Welcome back, {athleteProfile ? athleteProfile.fullName : 'Loading...'}
+            </p>
           </div>
         </div>
 
@@ -118,10 +118,20 @@ const AthleteDashboard = () => {
             </button>
           ))}
         </div>
+
+        <div className="mt-auto">
+          <button
+            onClick={logout}
+            className="flex items-center gap-3 px-4 py-3 rounded-xl w-full text-red-400 hover:bg-white/5 transition-all duration-300"
+          >
+            <LogOut className="text-gray-400 hover:bg-white/5" />
+            <span className="text-gray-400 hover:bg-white/5">Logout</span>
+          </button>
+        </div>
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 p-8">
+      <div className="flex-1 ml-64 p-8">
         {/* Top Navigation */}
         <div className="flex justify-between items-center mb-8">
           <div className="flex items-center gap-4">
@@ -152,13 +162,13 @@ const AthleteDashboard = () => {
             {activeTab === 'events' && events.map(event => (
               <div 
                 key={event._id} 
-                className="bg-black/30 backdrop-blur-xl border border-gray-800 rounded-xl p-6 hover:border-gray-700 transition-all duration-300"
+                className="bg-[#0F0F2D]/95 backdrop-blur-lg border border-white/10 rounded-xl p-6 hover:border-white/20 transition-all duration-300 shadow-lg"
               >
-                <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-4">
                   <div className="w-full h-32 rounded-lg bg-gradient-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center">
                     <Target className="w-8 h-8 text-blue-400" />
                   </div>
-                  <h3 className="text-lg font-semibold text-white">{event.title}</h3>
+                  <h3 className="text-xl font-semibold text-white bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">{event.title}</h3>
                   <div className="flex items-center gap-2 text-gray-400">
                     <Calendar className="w-4 h-4" />
                     <span className="text-sm">{new Date(event.date).toLocaleDateString()}</span>
@@ -169,7 +179,7 @@ const AthleteDashboard = () => {
                   </div>
                   <button
                     onClick={() => handleApply(event._id, 'event')}
-                    className="mt-4 w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg transition-colors"
+                    className="mt-2 w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white py-2.5 rounded-lg transition-all duration-300 font-medium shadow-lg"
                   >
                     Apply Now
                   </button>
@@ -180,20 +190,20 @@ const AthleteDashboard = () => {
             {activeTab === 'sponsorships' && sponsorships.map(sponsorship => (
               <div
                 key={sponsorship._id}
-                className="bg-black/30 backdrop-blur-xl border border-gray-800 rounded-xl p-6 hover:border-gray-700 transition-all duration-300"
+                className="bg-[#0F0F2D]/95 backdrop-blur-lg border border-white/10 rounded-xl p-6 hover:border-white/20 transition-all duration-300 shadow-lg"
               >
-                <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-4">
                   <div className="w-full h-32 rounded-lg bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center">
                     <Trophy className="w-8 h-8 text-purple-400" />
                   </div>
-                  <h3 className="text-lg font-semibold text-white">{sponsorship.title}</h3>
+                  <h3 className="text-xl font-semibold text-white bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">{sponsorship.title}</h3>
                   <p className="text-gray-400">{sponsorship.description}</p>
                   <div className="flex items-center gap-2 text-gray-400">
-                    <span className="text-sm">Amount: ₹{sponsorship.amount}</span>
+                    <span className="text-sm font-medium">Amount: ₹{sponsorship.amount}</span>
                   </div>
                   <button
                     onClick={() => handleApply(sponsorship._id, 'sponsorship')}
-                    className="mt-4 w-full bg-purple-500 hover:bg-purple-600 text-white py-2 rounded-lg transition-colors"
+                    className="mt-2 w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white py-2.5 rounded-lg transition-all duration-300 font-medium shadow-lg"
                   >
                     Apply Now
                   </button>

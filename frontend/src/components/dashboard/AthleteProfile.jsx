@@ -136,19 +136,34 @@ const AthleteProfile = () => {
       setUploadingMedia(false);
     }
   };
+ const handleDeleteMedia = async (mediaId, type) => {
+    if (window.confirm(`Are you sure you want to delete this ${type}?`)) {
+      try {
+        await axios.delete(`/api/athletes/media/${mediaId}/${type}`);
+        setMedia(prev => ({
+          ...prev,
+          [type]: prev[type].filter(item => item._id !== mediaId)
+        }));
+        alert('Media deleted successfully!');
+      } catch (error) {
+        console.error('Error deleting media:', error);
+        const errorMessage = error.response?.data?.message || 'Failed to delete media. Please try again.';
+        alert(errorMessage);
+      }
+    }
+  };
 
   if (loading) {
     return <div>Loading profile...</div>;
   }
 
   return (
-    <div className="w-full py-8 ">
-      <div className=" max -w-4xl mx-auto px-4 ">
+    <div className="w-full py-8">
+      <div className="max-w-4xl mx-auto px-4">
         <div className="flex justify-between items-center mb-6">
-          
           <button 
             className={`px-6 py-2.5 rounded-lg text-white font-medium transition-all duration-300 ${
-              editing ? 'bg-red-500 hover:bg-red-600' : 'bg-amber-600 hover:bg-amber-700'
+              editing ? 'bg-gradient-to-r from-red-500 to-red-600' : 'bg-gradient-to-r from-blue-500 to-purple-500'
             }`}
             onClick={() => setEditing(!editing)}
           >
@@ -157,37 +172,37 @@ const AthleteProfile = () => {
         </div>
 
         {editing ? (
-          <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-sm p-6 space-y-6 border border-amber-200">
+          <form onSubmit={handleSubmit} className="bg-[#0F0F2D]/95 backdrop-blur-lg rounded-xl p-6 space-y-6 border border-white/10 shadow-lg">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-amber-900 mb-2">Full Name</label>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Full Name</label>
                 <input
                   type="text"
                   name="fullName"
                   value={formData.fullName}
                   onChange={handleChange}
-                  className="w-full px-4 py-2 rounded-lg border border-amber-200 focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                  className="w-full px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-amber-900 mb-2">Age</label>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Age</label>
                 <input
                   type="number"
                   name="age"
                   value={formData.age}
                   onChange={handleChange}
-                  className="w-full px-4 py-2 rounded-lg border border-amber-200 focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                  className="w-full px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-amber-900 mb-2">Sports Category</label>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Sports Category</label>
                 <select
                   name="sportsCategory"
                   value={formData.sportsCategory}
                   onChange={handleChange}
-                  className="w-full px-4 py-2 rounded-lg border border-amber-200 focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                  className="w-full px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                   <option value="">Select Sport</option>
                   <option value="cricket">Cricket</option>
@@ -199,158 +214,180 @@ const AthleteProfile = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-amber-900 mb-2">Current Level</label>
-                <select
+                <label className="block text-sm font-medium text-gray-300 mb-2">Current Level</label>
+                <input
+                  type="text"
                   name="currentLevel"
                   value={formData.currentLevel}
                   onChange={handleChange}
-                  className="w-full px-4 py-2 rounded-lg border border-amber-200 focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-                >
-                  <option value="school">School</option>
-                  <option value="district">District</option>
-                  <option value="state">State</option>
-                  <option value="national">National</option>
-                </select>
+                  className="w-full px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
               </div>
-            </div>
 
-            <div className="space-y-6">
               <div>
-                <label className="block text-sm font-medium text-amber-900 mb-2">Bio</label>
+                <label className="block text-sm font-medium text-gray-300 mb-2">City</label>
+                <input
+                  type="text"
+                  name="city"
+                  value={formData.city}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">State</label>
+                <input
+                  type="text"
+                  name="state"
+                  value={formData.state}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+
+              <div className="col-span-2">
+                <label className="block text-sm font-medium text-gray-300 mb-2">Bio</label>
                 <textarea
                   name="bio"
                   value={formData.bio}
                   onChange={handleChange}
-                  className="w-full px-4 py-2 rounded-lg border border-amber-200 focus:ring-2 focus:ring-amber-500 focus:border-transparent min-h-32 resize-y"
-                  placeholder="Tell us about yourself..."
+                  rows="4"
+                  className="w-full px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                ></textarea>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Contact Number</label>
+                <input
+                  type="text"
+                  name="contactNumber"
+                  value={formData.contactNumber}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-amber-900 mb-2">Achievements</label>
-                <textarea
-                  name="achievements"
-                  value={formData.achievements}
+                <label className="block text-sm font-medium text-gray-300 mb-2">Guardian Name</label>
+                <input
+                  type="text"
+                  name="guardianName"
+                  value={formData.guardianName}
                   onChange={handleChange}
-                  className="w-full px-4 py-2 rounded-lg border border-amber-200 focus:ring-2 focus:ring-amber-500 focus:border-transparent min-h-32 resize-y"
-                  placeholder="List your achievements..."
+                  className="w-full px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
             </div>
 
-            <button 
-              type="submit" 
-              className="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-3 rounded-lg transition-colors duration-300"
-            >
-              Save Changes
-            </button>
+            <div className="flex justify-end">
+              <button
+                type="submit"
+                className="px-6 py-2.5 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg hover:from-blue-600 hover:to-purple-600 transition-all duration-300 shadow-lg"
+              >
+                Save Changes
+              </button>
+            </div>
           </form>
         ) : (
-          <div className="bg-blue-800 text-blue-800 rounded-xl shadow-sm p-6 space-y-6 border border-amber-200">
-            <div className="space-y-4">
-              <h2 className="text-2xl font-bold text-black">{profile.fullName}</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <p className="text-amber-800"><span className="font-medium text-amber-900">Age:</span> {profile.age}</p>
-                  <p className="text-amber-800"><span className="font-medium text-amber-900">Sport:</span> {profile.sportsCategory}</p>
-                  <p className="text-amber-800"><span className="font-medium text-amber-900">Level:</span> {profile.currentLevel}</p>
-                </div>
-                <div className="space-y-2">
-                  <p className="text-amber-800"><span className="font-medium text-amber-900">Location:</span> {profile.city}, {profile.state}</p>
-                  <p className="text-amber-800"><span className="font-medium text-amber-900">Contact:</span> {profile.contactNumber}</p>
-                  <p className="text-amber-800"><span className="font-medium text-amber-900">Guardian:</span> {profile.guardianName}</p>
+          <div className="bg-[#0F0F2D]/95 backdrop-blur-lg rounded-xl p-6 border border-white/10 shadow-lg space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <h3 className="text-lg font-semibold text-white mb-4 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">Personal Information</h3>
+                <div className="space-y-3">
+                  <p className="text-gray-300"><span className="font-medium text-blue-400">Full Name:</span> {profile.fullName}</p>
+                  <p className="text-gray-300"><span className="font-medium text-blue-400">Age:</span> {profile.age}</p>
+                  <p className="text-gray-300"><span className="font-medium text-blue-400">Sport:</span> {profile.sportsCategory}</p>
+                  <p className="text-gray-300"><span className="font-medium text-blue-400">Level:</span> {profile.currentLevel}</p>
                 </div>
               </div>
 
-              <div className="pt-4">
-                <h3 className="text-lg font-semibold text-amber-900 mb-2">Bio</h3>
-                <p className="text-amber-800">{profile.bio}</p>
-              </div>
-
-              <div className="pt-4">
-                <h3 className="text-lg font-semibold text-amber-900 mb-2">Achievements</h3>
-                <p className="text-amber-800">{profile.achievements}</p>
+              <div>
+                <h3 className="text-lg font-semibold text-white mb-4 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">Contact Information</h3>
+                <div className="space-y-3">
+                  <p className="text-gray-300"><span className="font-medium text-blue-400">Location:</span> {profile.city}, {profile.state}</p>
+                  <p className="text-gray-300"><span className="font-medium text-blue-400">Contact:</span> {profile.contactNumber}</p>
+                  <p className="text-gray-300"><span className="font-medium text-blue-400">Guardian:</span> {profile.guardianName}</p>
+                </div>
               </div>
             </div>
+
+            {profile.bio && (
+              <div>
+                <h3 className="text-lg font-semibold text-white mb-4 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">Bio</h3>
+                <p className="text-gray-300">{profile.bio}</p>
+              </div>
+            )}
+
+            {profile.achievements && (
+              <div>
+                <h3 className="text-lg font-semibold text-white mb-4 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">Achievements</h3>
+                <p className="text-gray-300">{profile.achievements}</p>
+              </div>
+            )}
           </div>
         )}
 
-        <div className="mt-8 bg-white rounded-xl shadow-sm p-6 border border-amber-200">
-          <h2 className="text-xl font-semibold text-amber-900 mb-6">Photos & Videos</h2>
+        <div className="mt-8">
+          <h3 className="text-lg font-semibold text-white mb-4 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">Media Gallery</h3>
           
-          <div className="border-2 border-dashed border-amber-300 rounded-lg p-8 text-center">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+            {media.photos.map((photo, index) => (
+              <div key={`photo-${index}`} className="relative group rounded-lg overflow-hidden bg-white/5 border border-white/10">
+                <img src={photo.url} alt="" className="w-full h-48 object-cover" />
+                <button
+                  onClick={() => handleDeleteMedia(photo._id, 'photos')}
+                  className="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-red-600"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                  </svg>
+                </button>
+              </div>
+            ))}
+            
+            {media.videos.map((video, index) => (
+              <div key={`video-${index}`} className="relative group rounded-lg overflow-hidden bg-white/5 border border-white/10">
+                <video src={video.url} controls className="w-full h-48 object-cover" />
+                <button
+                  onClick={() => handleDeleteMedia(video._id, 'videos')}
+                  className="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-red-600"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                  </svg>
+                </button>
+              </div>
+            ))}
+          </div>
+
+          <div className="space-y-4">
             <input
               type="file"
               multiple
               accept="image/*,video/*"
               onChange={handleFileSelect}
               className="hidden"
-              id="mediaInput"
+              id="media-upload"
             />
-            <label 
-              htmlFor="mediaInput" 
-              className="inline-block px-6 py-3 bg-amber-600 hover:bg-amber-700 text-white font-medium rounded-lg cursor-pointer transition-colors duration-300"
+            <label
+              htmlFor="media-upload"
+              className="inline-block px-6 py-2.5 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg hover:from-blue-600 hover:to-purple-600 transition-all duration-300 cursor-pointer shadow-lg"
             >
-              Select Files
+              Upload Media
             </label>
-            
+
             {(selectedFiles.photos.length > 0 || selectedFiles.videos.length > 0) && (
-              <button 
-                onClick={handleUpload}
-                className={`mt-4 px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white font-medium rounded-lg transition-colors duration-300 ${
-                  uploadingMedia ? 'opacity-50 cursor-not-allowed' : ''
-                }`}
-                disabled={uploadingMedia}
-              >
-                {uploadingMedia ? 'Uploading...' : 'Upload Selected Files'}
-              </button>
+              <div className="mt-4">
+                <button
+                  onClick={handleUpload}
+                  disabled={uploadingMedia}
+                  className="px-6 py-2.5 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-lg hover:from-green-600 hover:to-emerald-600 transition-all duration-300 shadow-lg disabled:opacity-50"
+                >
+                  {uploadingMedia ? 'Uploading...' : 'Upload Selected Files'}
+                </button>
+              </div>
             )}
-          </div>
-
-          {(selectedFiles.photos.length > 0 || selectedFiles.videos.length > 0) && (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
-              {selectedFiles.photos.map((photo, index) => (
-                <div key={`photo-preview-${index}`} className="relative aspect-square rounded-lg overflow-hidden bg-orange-50">
-                  <img src={photo.preview} alt="" className="w-full h-full object-cover" />
-                  <button
-                    onClick={() => removeSelectedFile('photos', index)}
-                    className="absolute top-2 right-2 w-8 h-8 flex items-center justify-center bg-red-500 bg-opacity-75 hover:bg-opacity-100 text-white rounded-full transition-all duration-300"
-                  >
-                    ×
-                  </button>
-                </div>
-              ))}
-              
-              {selectedFiles.videos.map((video, index) => (
-                <div key={`video-preview-${index}`} className="relative aspect-square rounded-lg overflow-hidden bg-orange-50">
-                  <video src={video.preview} className="w-full h-full object-cover" />
-                  <button
-                    onClick={() => removeSelectedFile('videos', index)}
-                    className="absolute top-2 right-2 w-8 h-8 flex items-center justify-center bg-red-500 bg-opacity-75 hover:bg-opacity-100 text-white rounded-full transition-all duration-300"
-                  >
-                    ×
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
-            {media.photos.map((photo, index) => (
-              <div key={`photo-${index}`} className="aspect-square rounded-lg overflow-hidden bg-orange-50">
-                <img src={photo.url} alt="" className="w-full h-full object-cover" />
-              </div>
-            ))}
-            
-            {media.videos.map((video, index) => (
-              <div key={`video-${index}`} className="aspect-square rounded-lg overflow-hidden bg-orange-50">
-                <video 
-                  src={video.url} 
-                  controls 
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            ))}
           </div>
         </div>
       </div>

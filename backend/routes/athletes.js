@@ -434,4 +434,39 @@ router.put('/profile', auth, async (req, res) => {
   }
 });
 
+// Delete media
+router.delete('/media/:mediaId/:type', auth, async (req, res) => {
+  try {
+    const { mediaId, type } = req.params;
+    const athlete = await Athlete.findById(req.user.id);
+
+    if (!athlete) {
+      return res.status(404).json({ message: 'Athlete not found' });
+    }
+
+    // Validate media type
+    if (!['photos', 'videos'].includes(type)) {
+      return res.status(400).json({ message: 'Invalid media type' });
+    }
+
+    // Find the media item
+    const mediaItem = athlete[type].id(mediaId);
+    if (!mediaItem) {
+      return res.status(404).json({ message: 'Media not found' });
+    }
+
+    // Delete from Cloudinary
+    await cloudinary.uploader.destroy(mediaItem.publicId);
+
+    // Remove from athlete's media array
+    athlete[type].pull(mediaId);
+    await athlete.save();
+
+    res.json({ message: 'Media deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting media:', error);
+    res.status(500).json({ message: 'Failed to delete media' });
+  }
+});
+
 module.exports = router;

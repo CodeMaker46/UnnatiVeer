@@ -41,185 +41,6 @@ const DonorDashboard = () => {
     { id: 'donations', label: 'My Donations', icon: Heart },
   ];
 
-  const styles = {
-    container: {
-      minHeight: '100vh',
-      backgroundColor: '#0B0B1E',
-      color: 'white',
-      padding: '20px',
-      maxWidth: '1200px',
-      margin: '0 auto'
-    },
-    filters: {
-      backgroundColor: 'rgba(255, 255, 255, 0.1)',
-      backdropFilter: 'blur(8px)',
-      padding: '20px',
-      borderRadius: '8px',
-      marginBottom: '20px',
-      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
-    },
-    filterRow: {
-      display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-      gap: '15px',
-      marginBottom: '15px'
-    },
-    input: {
-      width: '100%',
-      padding: '8px 12px',
-      borderRadius: '4px',
-      border: '1px solid rgba(255, 255, 255, 0.2)',
-      fontSize: '14px',
-      backgroundColor: 'rgba(255, 255, 255, 0.05)',
-      color: 'white'
-    },
-    select: {
-      width: '100%',
-      padding: '8px 12px',
-      borderRadius: '4px',
-      border: '1px solid rgba(255, 255, 255, 0.2)',
-      fontSize: '14px',
-      backgroundColor: 'rgba(255, 255, 255, 0.05)',
-      color: 'white'
-    },
-    athleteGrid: {
-      display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-      gap: '20px'
-    },
-    athleteCard: {
-      backgroundColor: 'rgba(255, 255, 255, 0.1)',
-      backdropFilter: 'blur(8px)',
-      borderRadius: '8px',
-      padding: '20px',
-      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-      cursor: 'pointer',
-      transition: 'transform 0.2s, background-color 0.2s',
-      '&:hover': {
-        transform: 'translateY(-5px)',
-        backgroundColor: 'rgba(255, 255, 255, 0.15)'
-      }
-    },
-    modal: {
-      position: 'fixed',
-      top: '0',
-      left: '0',
-      right: '0',
-      bottom: '0',
-      backgroundColor: 'rgba(0,0,0,0.8)',
-      backdropFilter: 'blur(8px)',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      zIndex: 1000
-    },
-    modalContent: {
-      backgroundColor: '#0B0B1E',
-      padding: '30px',
-      borderRadius: '8px',
-      maxWidth: '800px',
-      width: '90%',
-      maxHeight: '90vh',
-      overflow: 'auto',
-      border: '1px solid rgba(255, 255, 255, 0.1)',
-      color: 'white'
-    },
-    button: {
-      background: 'linear-gradient(to right, #4CAF50, #45a049)',
-      color: 'white',
-      padding: '10px 20px',
-      border: 'none',
-      borderRadius: '4px',
-      cursor: 'pointer',
-      fontSize: '16px',
-      marginTop: '10px',
-      transition: 'transform 0.2s, opacity 0.2s',
-      '&:hover': {
-        transform: 'translateY(-2px)',
-        opacity: 0.9
-      }
-    },
-    closeButton: {
-      background: 'linear-gradient(to right, #f44336, #d32f2f)',
-      color: 'white',
-      padding: '10px 20px',
-      border: 'none',
-      borderRadius: '4px',
-      cursor: 'pointer',
-      fontSize: '16px',
-      marginTop: '10px',
-      transition: 'transform 0.2s, opacity 0.2s',
-      '&:hover': {
-        transform: 'translateY(-2px)',
-        opacity: 0.9
-      }
-    },
-    achievementTag: {
-      backgroundColor: 'rgba(255, 255, 255, 0.1)',
-      padding: '4px 8px',
-      borderRadius: '4px',
-      fontSize: '12px',
-      marginRight: '8px',
-      marginBottom: '8px',
-      display: 'inline-block',
-      color: 'white'
-    },
-    viewProfileButton: {
-      background: 'linear-gradient(to right, #2196F3, #1976D2)',
-      color: 'white',
-      padding: '8px 16px',
-      border: 'none',
-      borderRadius: '4px',
-      cursor: 'pointer',
-      fontSize: '14px',
-      marginTop: '10px',
-      transition: 'transform 0.2s, opacity 0.2s',
-      '&:hover': {
-        transform: 'translateY(-2px)',
-        opacity: 0.9
-      }
-    },
-    profileHeader: {
-      display: 'flex',
-      gap: '20px',
-      marginBottom: '30px'
-    },
-    profilePhoto: {
-      width: '200px',
-      height: '200px',
-      borderRadius: '8px',
-      objectFit: 'cover'
-    },
-    mediaGrid: {
-      display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
-      gap: '20px',
-      marginTop: '20px'
-    },
-    mediaItem: {
-      borderRadius: '8px',
-      overflow: 'hidden',
-      backgroundColor: 'rgba(255, 255, 255, 0.05)'
-    },
-    mediaImage: {
-      width: '100%',
-      height: '200px',
-      objectFit: 'cover'
-    },
-    mediaVideo: {
-      width: '100%',
-      height: '200px'
-    },
-    title: {
-      fontSize: '2.5rem',
-      fontWeight: 'bold',
-      background: 'linear-gradient(to right, #4CAF50, #2196F3)',
-      WebkitBackgroundClip: 'text',
-      WebkitTextFillColor: 'transparent',
-      marginBottom: '1.5rem'
-    }
-  };
-
   const fetchAthletes = useCallback(async () => {
     try {
       const response = await axios.get('/api/donors/athletes', { params: filters });
@@ -324,7 +145,7 @@ const DonorDashboard = () => {
                 <motion.div
                   key={athlete._id}
                   whileHover={{ y: -4 }}
-                  className="bg-[#0F0F2D] rounded-lg p-6"
+                  className="bg-[#0F0F2D] rounded-lg p-6 hover:bg-white/5 transition-colors duration-200"
                 >
                   <h3 className="text-xl font-semibold text-white mb-4">{athlete.fullName}</h3>
                   <div className="space-y-2 text-gray-400">
@@ -531,73 +352,69 @@ const DonorDashboard = () => {
     const profilePhoto = selectedAthlete.photos?.[0]?.url || 'default-profile-photo.jpg';
 
     return (
-      <div style={styles.modal}>
-        <div style={styles.modalContent}>
-          <div style={styles.profileHeader}>
+      <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex justify-center items-center z-50">
+        <div className="bg-[#0B0B1E] p-8 rounded-lg max-w-4xl w-[90%] max-h-[90vh] overflow-auto border border-white/10 text-white">
+          <div className="flex gap-6 mb-8">
             <img 
               src={profilePhoto} 
               alt={selectedAthlete.fullName} 
-              style={styles.profilePhoto}
+              className="w-48 h-48 rounded-lg object-cover"
             />
             <div>
-              <h2>{selectedAthlete.fullName}</h2>
-              <p><strong>Sport:</strong> {selectedAthlete.sportsCategory}</p>
-              <p><strong>Level:</strong> {selectedAthlete.currentLevel}</p>
-              <p><strong>Location:</strong> {selectedAthlete.city}, {selectedAthlete.state}</p>
+              <h2 className="text-2xl font-bold mb-2">{selectedAthlete.fullName}</h2>
+              <p className="mb-1"><span className="font-semibold">Sport:</span> {selectedAthlete.sportsCategory}</p>
+              <p className="mb-1"><span className="font-semibold">Level:</span> {selectedAthlete.currentLevel}</p>
+              <p className="mb-1"><span className="font-semibold">Location:</span> {selectedAthlete.city}, {selectedAthlete.state}</p>
             </div>
           </div>
 
-          <div>
-            <h3>Photos & Videos</h3>
-            <div style={styles.mediaGrid}>
+          <div className="mb-8">
+            <h3 className="text-xl font-semibold mb-4">Photos & Videos</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
               {selectedAthlete.photos?.slice(1).map((photo, index) => (
-                <div key={`photo-${index}`} style={styles.mediaItem}>
-                  <img src={photo.url} alt="" style={styles.mediaImage} />
+                <div key={`photo-${index}`} className="bg-white/5 rounded-lg overflow-hidden">
+                  <img src={photo.url} alt="" className="w-full h-48 object-cover" />
                 </div>
               ))}
               
               {selectedAthlete.videos?.map((video, index) => (
-                <div key={`video-${index}`} style={styles.mediaItem}>
+                <div key={`video-${index}`} className="bg-white/5 rounded-lg overflow-hidden">
                   <video 
                     src={video.url} 
                     controls 
-                    style={styles.mediaVideo}
+                    className="w-full h-48"
                   />
                 </div>
               ))}
             </div>
           </div>
 
-          <div style={{ marginTop: '20px' }}>
-            <h3>Personal Information</h3>
-            <p><strong>Age:</strong> {selectedAthlete.age}</p>
-            <p><strong>Contact:</strong> {selectedAthlete.contactNumber}</p>
-            <p><strong>Guardian:</strong> {selectedAthlete.guardianName}</p>
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-xl font-semibold mb-4">Personal Information</h3>
+              <p className="mb-1"><span className="font-semibold">Age:</span> {selectedAthlete.age}</p>
+              <p className="mb-1"><span className="font-semibold">Contact:</span> {selectedAthlete.contactNumber}</p>
+              <p className="mb-1"><span className="font-semibold">Guardian:</span> {selectedAthlete.guardianName}</p>
+            </div>
             
             {selectedAthlete.bio && (
-              <>
-                <h3>Bio</h3>
-                <p>{selectedAthlete.bio}</p>
-              </>
+              <div>
+                <h3 className="text-xl font-semibold mb-4">Bio</h3>
+                <p className="text-gray-300">{selectedAthlete.bio}</p>
+              </div>
             )}
             
             {selectedAthlete.achievements && (
-              <div style={styles.achievementsSection}>
-                <h3>Achievements</h3>
-                <p>{selectedAthlete.achievements}</p>
+              <div>
+                <h3 className="text-xl font-semibold mb-4">Achievements</h3>
+                <p className="text-gray-300">{selectedAthlete.achievements}</p>
               </div>
             )}
 
-            <div style={{ marginTop: '30px', display: 'flex', gap: '10px' }}>
+            <div className="flex gap-4 mt-8">
               <button 
                 onClick={() => setShowDonateModal(true)}
-                style={{
-                  ...styles.button,
-                  background: 'linear-gradient(to right, #4CAF50, #45a049)',
-                  padding: '12px 24px',
-                  fontSize: '18px',
-                  width: '200px'
-                }}
+                className="flex-1 bg-gradient-to-r from-green-500 to-green-600 text-white py-3 px-6 rounded-lg text-lg font-semibold hover:opacity-90 transform hover:-translate-y-0.5 transition-all"
               >
                 Donate Now
               </button>
@@ -611,18 +428,12 @@ const DonorDashboard = () => {
               )}
               <button 
                 onClick={() => setSelectedAthlete(null)}
-                style={{
-                  ...styles.closeButton,
-                  padding: '12px 24px',
-                  fontSize: '18px'
-                }}
+                className="flex-1 bg-gradient-to-r from-red-500 to-red-600 text-white py-3 px-6 rounded-lg text-lg font-semibold hover:opacity-90 transform hover:-translate-y-0.5 transition-all"
               >
                 Close
               </button>
             </div>
           </div>
-
-
         </div>
       </div>
     );

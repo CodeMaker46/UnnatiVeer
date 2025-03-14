@@ -228,11 +228,15 @@ function App() {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => setShowCards(true)}
+              onClick={() => { if(isAuthenticated){
+                navigate(`/${userType}/dashboard`);
+              } else {
+                setShowCards(true);
+              }}}
               className="bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold px-8 py-4 rounded-full 
                        shadow-lg hover:shadow-xl transition-all duration-300 text-lg group"
             >
-              Get Started
+              {(isAuthenticated) ? 'Go to Dashboard'  : 'Get Started'}
               <ChevronRight className="inline ml-2 group-hover:translate-x-1 transition-transform" />
             </motion.button>
           )}
