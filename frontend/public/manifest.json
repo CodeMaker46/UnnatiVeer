@@ -1,6 +1,6 @@
 {
-  "short_name": "Sports Connect",
-  "name": "Sports Connect Platform",
+  "short_name": "UnnatiVeer",
+  "name": "UnnatiVeer - Sports Connect Platform",
   "icons": [
     {
       "src": "favicon.ico",
@@ -12,4 +12,4 @@
   "display": "standalone",
   "theme_color": "#000000",
   "background_color": "#ffffff"
-} 
+}

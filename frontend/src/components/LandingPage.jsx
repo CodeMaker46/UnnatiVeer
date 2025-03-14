@@ -354,7 +354,7 @@ function App() {
           </div>
         </motion.div>
         {/* Stars effect */}
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?fit=crop&w=2000&q=80')] opacity-20 pointer-events-none" />
+        <div className="absolute inset-0 opacity-20 pointer-events-none" />
       </div>
     </div>
   );
